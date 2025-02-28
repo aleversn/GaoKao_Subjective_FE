@@ -1,0 +1,63 @@
+{
+    "name": "lasfe",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "api": "api-cli get https://las.creatorsn.com/api/v3/api-docs -d ./src/api/",
+        "api:local": "api-cli get http://59.77.134.18:5081/v3/api-docs -d ./src/api/",
+        "deploy": "vue-cli-service build && gulp deploy"
+    },
+    "dependencies": {
+        "@creatorsn/powereditor": "^2.4.3",
+        "@tiptap/vue-2": "2.2.4",
+        "axios-swagger-helper": "^0.0.53",
+        "chart.js": "^3.8.0",
+        "core-js": "^3.6.5",
+        "cropperjs": "^1.5.13",
+        "dart-sass": "^1.25.0",
+        "onecolor": "^4.0.0",
+        "register-service-worker": "^1.7.2",
+        "sass": "^1.61.0",
+        "sass-loader": "^8.0.2",
+        "siriwave": "^2.4.0",
+        "vfluentdesign": "^1.2.51",
+        "vue": "^2.7.16",
+        "vue-router": "^3.2.0",
+        "vuex": "^3.4.0",
+        "xlsx": "^0.18.5"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.10",
+        "@vue/cli-plugin-eslint": "~4.5.10",
+        "@vue/cli-service": "~4.5.10",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "gulp": "^4.0.2",
+        "gulp-util": "^3.0.8",
+        "vinyl-ftp": "^0.6.1",
+        "vue-template-compiler": "^2.6.11"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {}
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
+}
