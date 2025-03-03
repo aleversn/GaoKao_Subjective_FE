@@ -154,7 +154,7 @@
                     <h3>
                         {{ error.name }}
                     </h3>
-                    <p style="font-size: 13px;">{{ error.description }}</p>
+                    <p style="font-size: 13px">{{ error.description }}</p>
                 </div>
             </div>
             <div
@@ -537,7 +537,8 @@ export default {
                             } else {
                                 item.scoreItem.label =
                                     item.scoreItem.label.toString();
-                                item.scoreItem.scored = true;
+                                if (parseInt(item.scoreItem.label) >= 0)
+                                    item.scoreItem.scored = true;
                                 try {
                                     item.scoreItem.seg_labels = JSON.parse(
                                         item.scoreItem.seg_labels
@@ -581,7 +582,7 @@ export default {
                         question_id: item.id,
                         label: item.scoreItem.label
                             ? item.scoreItem.label
-                            : '0',
+                            : '-1',
                         comments: '',
                         user_id: '',
                         user_name: '',
@@ -599,7 +600,8 @@ export default {
                         this.$barWarning('更新成功', {
                             status: 'correct'
                         });
-                        this.$set(item.scoreItem, 'scored', true);
+                        if (parseInt(item.scoreItem.label) >= 0)
+                            this.$set(item.scoreItem, 'scored', true);
                     } else {
                         this.$barWarning(res.message, {
                             status: 'warning'
@@ -617,7 +619,6 @@ export default {
         sumScore(item) {
             if (!item.scoreItem.seg_labels) return;
             let count = 0;
-            console.log(item.scoreItem.seg_labels)
             for (let segItem of item.scoreItem.seg_labels) {
                 if (parseInt(segItem.label).toString() !== 'NaN') {
                     count += parseInt(segItem.label);
