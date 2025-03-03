@@ -352,7 +352,7 @@ export default {
                 this.getQuestionList();
             });
         },
-        filterValue() {
+        'showValue.key'() {
             this.page = 1;
         },
         page() {
