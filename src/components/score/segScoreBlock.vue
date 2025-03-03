@@ -215,8 +215,8 @@ export default {
             );
             if (item) {
                 let index = this.value.scoreItem.seg_labels.indexOf(item);
-                for (let key in this.segValue.label) {
-                    item[key] = this.segValue.label[key];
+                for (let key in this.segValue) {
+                    item[key] = this.segValue[key];
                 }
                 this.$set(this.value.scoreItem.seg_labels, index, item);
             } else {

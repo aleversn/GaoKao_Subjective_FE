@@ -617,6 +617,7 @@ export default {
         sumScore(item) {
             if (!item.scoreItem.seg_labels) return;
             let count = 0;
+            console.log(item.scoreItem.seg_labels)
             for (let segItem of item.scoreItem.seg_labels) {
                 if (parseInt(segItem.label).toString() !== 'NaN') {
                     count += parseInt(segItem.label);
