@@ -1,7 +1,7 @@
 <template>
     <power-editor
         :placeholder="'Edit your question...'"
-        :editable="false"
+        :editable="editable"
         :theme="theme"
         class="msg-power-editor"
         ref="editor"
@@ -13,6 +13,9 @@
         "
         contentMaxWidth="3000px"
         readOnlyPaddingBottom="15"
+        :style="{
+            'box-shadow': editable ? '0px 0px 2px rgba(0, 0, 0, 0.1)' : ''
+        }"
         @on-mounted="setEditorContent"
     ></power-editor>
 </template>
@@ -32,6 +35,9 @@ export default {
         mode: {
             default: false
         },
+        editable: {
+            default: false
+        },
         theme: {
             default: 'light'
         }
@@ -45,6 +51,15 @@ export default {
         },
         decode_key() {
             this.setEditorContent();
+        },
+        editable(val) {
+            if (!val) {
+                let md = this.$refs.editor.saveMarkdown();
+                this.$emit('update-value', {
+                    item: this.value,
+                    value: md
+                });
+            }
         }
     },
     methods: {

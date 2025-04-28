@@ -1,33 +1,24 @@
 <template>
-    <div
-        class="login-block"
-        :class="[{dark: theme === 'dark'}]"
-    >
+    <div class="login-block" :class="[{ dark: theme === 'dark' }]">
         <transition name="scale-up-to-up">
             <fv-progress-bar
                 v-show="!lock.forgot"
                 :loading="true"
                 :foreground="color"
-                style="position: absolute; left: 0px; top: 0px; width: 100%;"
+                style="position: absolute; left: 0px; top: 0px; width: 100%"
             ></fv-progress-bar>
         </transition>
         <div class="main-block">
-            <span
-                class="border-top"
-                :style="{background: gradient}"
-            ></span>
+            <span class="border-top" :style="{ background: gradient }"></span>
             <div class="s1">
                 <img
                     draggable="false"
                     class="logo-text"
                     src="@/assets/logo_text.svg"
                     alt=""
-                >
-                <p
-                    v-show="step === 0"
-                    class="main-title"
-                >
-                    {{local(`Forgot Password`)}}
+                />
+                <p v-show="step === 0" class="main-title">
+                    {{ local(`Forgot Password`) }}
                 </p>
                 <fv-text-box
                     v-show="step === 0"
@@ -37,7 +28,12 @@
                     :revealBorder="true"
                     background="whitesmoke"
                     :border-radius="6"
-                    style="width: 100%; max-width: 375px; height: 40px; margin-top: 45px;"
+                    style="
+                        width: 100%;
+                        max-width: 375px;
+                        height: 40px;
+                        margin-top: 45px;
+                    "
                     @keyup="handleEnter"
                 ></fv-text-box>
                 <fv-button
@@ -48,25 +44,20 @@
                     fontSize="12"
                     fontWeight="600"
                     :is-box-shadow="true"
-                    style="width: 180px; height: 30px; margin-top: 20px;"
+                    style="width: 180px; height: 30px; margin-top: 20px"
                     :disabled="!lock.forgot || !user.id"
                     @click="sendCode"
-                >{{local(`Continue`)}}</fv-button>
-                <p
-                    v-show="step === 1"
-                    class="main-title"
+                    >{{ local(`Continue`) }}</fv-button
                 >
-                    {{local(`Verify`)}}
+                <p v-show="step === 1" class="main-title">
+                    {{ local(`Verify`) }}
                 </p>
-                <div
-                    v-show="step === 1"
-                    class="verify-id-block"
-                >
+                <div v-show="step === 1" class="verify-id-block">
                     <i
                         class="block-btn ms-Icon ms-Icon--ChevronLeft20"
                         @click="step = 0"
                     ></i>
-                    <p class="verify-id-span">{{user.id}}</p>
+                    <p class="verify-id-span">{{ user.id }}</p>
                 </div>
                 <fv-text-box
                     v-show="step === 1"
@@ -78,14 +69,19 @@
                     background="whitesmoke"
                     :border-radius="6"
                     :disabled="!lock.forgot"
-                    style="width: 100%; max-width: 375px; height: 40px; margin-top: 15px;"
+                    style="
+                        width: 100%;
+                        max-width: 375px;
+                        height: 40px;
+                        margin-top: 15px;
+                    "
                 ></fv-text-box>
                 <fv-VerifyBox
                     v-show="step === 1"
                     v-model="verifyCode"
                     :length="6"
                     :disabled="!lock.forgot"
-                    style="width: 100%;"
+                    style="width: 100%"
                     @confirm="handlerForgot"
                 ></fv-VerifyBox>
                 <fv-button
@@ -96,10 +92,12 @@
                     fontSize="12"
                     fontWeight="600"
                     :is-box-shadow="true"
-                    style="width: 180px; height: 30px; margin-top: 20px;"
+                    style="width: 180px; height: 30px; margin-top: 20px"
                     :disabled="!lock.sendCode || counter > 0"
                     @click="sendCode"
-                >{{local(`Resend Code`)}}{{counter > 0 ? ` ${counter}s`: ''}}</fv-button>
+                    >{{ local(`Resend Code`)
+                    }}{{ counter > 0 ? ` ${counter}s` : '' }}</fv-button
+                >
                 <fv-button
                     v-show="step === 1"
                     :background="color"
@@ -108,32 +106,30 @@
                     fontSize="12"
                     fontWeight="600"
                     :is-box-shadow="true"
-                    style="width: 180px; height: 30px; margin-top: 20px;"
+                    style="width: 180px; height: 30px; margin-top: 20px"
                     :disabled="verifyCode.length < 6 || !lock.forgot"
                     @click="handlerForgot"
-                >{{local(`Continue`)}}</fv-button>
+                    >{{ local(`Continue`) }}</fv-button
+                >
                 <div class="s2">
-                    <p
-                        class="to-apply"
-                        @click="$Go('/login')"
-                    >{{local('Login')}}</p>
-                    <p
-                        class="to-apply"
-                        style="margin: 0px 8px;"
-                    >·</p>
-                    <p
-                        class="to-apply"
-                        @click="$Go('/login/apply')"
-                    >{{local('No account yet?')}}</p>
+                    <p class="to-apply" @click="$Go('/login')">
+                        {{ local('Login') }}
+                    </p>
+                    <p class="to-apply" style="margin: 0px 8px">·</p>
+                    <p class="to-apply" @click="$Go('/login/apply')">
+                        {{ local('No account yet?') }}
+                    </p>
                 </div>
             </div>
         </div>
         <div class="s3">
-            <p>{{local('Terms and Conditions')}} · {{local('Privacy Policy')}}</p>
+            <p>
+                {{ local('Terms and Conditions') }} ·
+                {{ local('Privacy Policy') }}
+            </p>
         </div>
     </div>
 </template>
-  
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
@@ -252,6 +248,11 @@ export default {
         },
         handleEnter(event) {
             if (event.keyCode == 13) this.sendCode();
+        },
+        beforeDestroy() {
+            for (let key in this.timer) {
+                clearInterval(this.timer[key]);
+            }
         }
     }
 };
@@ -411,4 +412,3 @@ export default {
     }
 }
 </style>
-  

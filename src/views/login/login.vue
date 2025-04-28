@@ -251,6 +251,11 @@ export default {
         },
         handleEnter(event) {
             if (event.keyCode == 13) this.handleLogin();
+        },
+        beforeDestroy() {
+            for (let key in this.timer) {
+                clearInterval(this.timer[key]);
+            }
         }
     }
 };

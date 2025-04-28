@@ -10,6 +10,7 @@
                 :background="'rgba(238, 238, 239, 1)'"
                 style="width: 100%"
             ></fv-Pivot>
+            <div v-show="!isLock" class="lock-banner">请等待...</div>
         </div>
         <div v-if="currentCourse && currentErrors" class="score-info">
             <p style="margin-right: 15px">学科: {{ currentCourse.name }}</p>
@@ -30,6 +31,7 @@
                 v-model="showValue"
                 :options="showOptions"
                 placeholder="筛选器"
+                :disabled="!isLock"
                 style="width: 120px; height: 30px; margin-left: 15px"
             >
             </fv-Combobox>
@@ -182,10 +184,23 @@
                     </div>
                     <p class="score-title">分值: {{ item.score }}</p>
                 </div>
+                <fv-button
+                    :border-radius="50"
+                    :font-size="12"
+                    :icon="item.editQuestion ? 'Accept' : 'Edit'"
+                    :disabled="!lock.scores"
+                    :is-box-shadow="true"
+                    style="width: 85px; height: 30px; margin-top: 15px"
+                    @click="switchQuestionEdit(item)"
+                >
+                    {{item.editQuestion ? '确认修改' : '编辑问题'}}
+                </fv-button>
                 <editor-item
                     :value="item"
                     :theme="theme"
+                    :editable="item.editQuestion"
                     style="font-size: 15px"
+                    @update-value="update_question(item, $event.value)"
                 ></editor-item>
                 <p class="split-title">学生作答</p>
                 <div
@@ -195,12 +210,34 @@
                 >
                     <div class="ctl-block">
                         <p class="step-title">步骤 {{ si + 1 }}</p>
+                        <fv-button
+                            :border-radius="50"
+                            :font-size="12"
+                            :disabled="!lock.scores"
+                            style="width: 25px; height: 25px; margin-left: 5px"
+                            @click="switchBadAnswersEdit(item, si)"
+                        >
+                            <i
+                                class="ms-Icon"
+                                :class="[
+                                    `ms-Icon--${
+                                        item.edit_bad_answers[si]
+                                            ? 'Accept'
+                                            : 'Edit'
+                                    }`
+                                ]"
+                            ></i>
+                        </fv-button>
                     </div>
                     <editor-item
                         :value="item"
                         :decode_key="seg"
+                        :editable="item.edit_bad_answers[si]"
                         :mode="true"
                         :theme="theme"
+                        @update-value="
+                            update_step_response(item, si, $event.value)
+                        "
                     ></editor-item>
                     <div v-if="item.scoreItem" class="ctl-block">
                         <seg-score-block
@@ -267,11 +304,27 @@
                     <p class="score-title">分值: {{ item.score }}</p>
                 </div>
                 <p class="split-title">参考答案</p>
+                <fv-button
+                    :border-radius="50"
+                    :font-size="12"
+                    :disabled="!lock.scores"
+                    style="width: 25px; height: 25px; margin-top: 5px"
+                    @click="switchReferenceEdit(item)"
+                >
+                    <i
+                        class="ms-Icon"
+                        :class="[
+                            `ms-Icon--${item.editAnswer ? 'Accept' : 'Edit'}`
+                        ]"
+                    ></i>
+                </fv-button>
                 <editor-item
                     :value="item"
                     :decode_key="'answer'"
                     :editorBackground="'rgba(220, 219, 239, 0.1)'"
+                    :editable="item.editAnswer"
                     :theme="theme"
+                    @update-value="update_reference(item, $event.value)"
                 ></editor-item>
             </div>
         </div>
@@ -492,9 +545,16 @@ export default {
                         let dataList = res.data;
                         dataList.forEach((item, index) => {
                             item.scoreItem = null;
+                            item.editQuestion = false;
+                            item.editAnswer = false;
                             item.showTotalScore = false;
                             if (!item.bad_student_answer_segs)
                                 item.bad_student_answer_segs = [];
+                            else
+                                item.edit_bad_answers =
+                                    item.bad_student_answer_segs.map(
+                                        () => false
+                                    );
                         });
                         this.value = dataList;
                         this.getQuestionScores();
@@ -616,6 +676,133 @@ export default {
                     this.lock.scores = true;
                 });
         },
+        update_step_response(item, idx, val) {
+            if (!this.lock.scores) return;
+            this.lock.scores = false;
+            axios
+                .post(
+                    '/update_answer',
+                    {
+                        course_id: this.currentCourse.key,
+                        course: this.currentCourse.course,
+                        course_type: this.currentCourse.course_type,
+                        question_id: item.id,
+                        answer_idx: idx,
+                        answer: val,
+                        user_id: '',
+                        user_name: ''
+                    },
+                    {
+                        headers: {
+                            'Api-key': 'creatorsn.com'
+                        }
+                    }
+                )
+                .then((res) => {
+                    res = res.data;
+                    if (res.code === 200) {
+                        this.$barWarning('更新成功', {
+                            status: 'correct'
+                        });
+                        this.$set(item.bad_student_answer_segs, idx, val);
+                    } else {
+                        this.$barWarning(res.message, {
+                            status: 'warning'
+                        });
+                    }
+                    this.lock.scores = true;
+                })
+                .catch((err) => {
+                    this.$barWarning(err, {
+                        status: 'error'
+                    });
+                    this.lock.scores = true;
+                });
+        },
+        update_reference(item, val) {
+            if (!this.lock.scores) return;
+            this.lock.scores = false;
+            axios
+                .post(
+                    '/update_reference',
+                    {
+                        course_id: this.currentCourse.key,
+                        course: this.currentCourse.course,
+                        course_type: this.currentCourse.course_type,
+                        question_id: item.id,
+                        answer: val,
+                        user_id: '',
+                        user_name: ''
+                    },
+                    {
+                        headers: {
+                            'Api-key': 'creatorsn.com'
+                        }
+                    }
+                )
+                .then((res) => {
+                    res = res.data;
+                    if (res.code === 200) {
+                        this.$barWarning('更新成功', {
+                            status: 'correct'
+                        });
+                        this.$set(item, 'answer', val);
+                    } else {
+                        this.$barWarning(res.message, {
+                            status: 'warning'
+                        });
+                    }
+                    this.lock.scores = true;
+                })
+                .catch((err) => {
+                    this.$barWarning(err, {
+                        status: 'error'
+                    });
+                    this.lock.scores = true;
+                });
+        },
+        update_question(item, val) {
+            if (!this.lock.scores) return;
+            this.lock.scores = false;
+            axios
+                .post(
+                    '/update_question',
+                    {
+                        course_id: this.currentCourse.key,
+                        course: this.currentCourse.course,
+                        course_type: this.currentCourse.course_type,
+                        question_id: item.id,
+                        answer: val,
+                        user_id: '',
+                        user_name: ''
+                    },
+                    {
+                        headers: {
+                            'Api-key': 'creatorsn.com'
+                        }
+                    }
+                )
+                .then((res) => {
+                    res = res.data;
+                    if (res.code === 200) {
+                        this.$barWarning('更新成功', {
+                            status: 'correct'
+                        });
+                        this.$set(item, 'content', val);
+                    } else {
+                        this.$barWarning(res.message, {
+                            status: 'warning'
+                        });
+                    }
+                    this.lock.scores = true;
+                })
+                .catch((err) => {
+                    this.$barWarning(err, {
+                        status: 'error'
+                    });
+                    this.lock.scores = true;
+                });
+        },
         sumScore(item) {
             if (!item.scoreItem.seg_labels) return;
             let count = 0;
@@ -638,6 +825,18 @@ export default {
                         this.$refs[`label_${index}`][0].focus();
                 });
             }
+        },
+        switchReferenceEdit(item) {
+            let status = item.editAnswer;
+            this.$set(item, 'editAnswer', !status);
+        },
+        switchQuestionEdit(item) {
+            let status = item.editQuestion;
+            this.$set(item, 'editQuestion', !status);
+        },
+        switchBadAnswersEdit(item, index) {
+            let status = item.edit_bad_answers[index];
+            this.$set(item.edit_bad_answers, index, !status);
         }
     }
 };
@@ -662,6 +861,21 @@ export default {
         width: 100%;
         height: 120px;
         padding: 0px 5px;
+
+        .lock-banner {
+            @include HcenterVcenter;
+
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            z-index: 2;
+        }
     }
 
     .score-info {
@@ -746,20 +960,22 @@ export default {
 
                     position: relative;
                     min-width: 50px;
-                    width: 50px;
+                    width: 120px;
                     padding-top: 35px;
 
                     .step-title {
                         @include HcenterVcenter;
 
                         position: relative;
-                        width: 120px;
+                        width: 100%;
                         height: 25px;
+                        flex: 1;
                         background: rgba(246, 175, 75, 1);
                         color: rgba(50, 49, 48, 1);
                         font-size: 12px;
                         font-weight: bold;
                         border-radius: 6px;
+                        box-sizing: border-box;
                         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
                         user-select: none;
                     }

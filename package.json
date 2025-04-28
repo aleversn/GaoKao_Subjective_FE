@@ -11,7 +11,7 @@
         "deploy": "vue-cli-service build && gulp deploy"
     },
     "dependencies": {
-        "@creatorsn/powereditor": "^2.4.3",
+        "@creatorsn/powereditor": "^2.5.1",
         "@tiptap/vue-2": "2.2.4",
         "axios-swagger-helper": "^0.0.53",
         "chart.js": "^3.8.0",

@@ -15,7 +15,7 @@
 import { mapGetters } from 'vuex';
 
 import bannerBlock from '@/components/general/banner.vue';
-import bottomBanner from '@/components/chat/bottomBanner.vue';
+import bottomBanner from '@/components/general/bottomBanner.vue';
 
 export default {
     components: {

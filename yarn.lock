@@ -1001,10 +1001,10 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@creatorsn/powereditor@^2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@creatorsn/powereditor/-/powereditor-2.4.3.tgz#16f2c3b95c3eda4c40b2869de70b87ac9ff28086"
-  integrity sha512-Zgr0ALZemhwoTN0RreI0tVNPnObGDhFqae3P4Q4lIZeCzVhEiMs53LLlFJgGus85oFt4TAllcJ5ygbpQzvK/xg==
+"@creatorsn/powereditor@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@creatorsn/powereditor/-/powereditor-2.5.1.tgz#a717fcc07d41d3bf61fd1f4060fbe00c92aaf10e"
+  integrity sha512-mN0laSdCfn0hnBHMHzf8+cV9IQwiYGEKKr2xEgmn6dO1zwnkgxaGIMoZ876yeKhDy146o4vhSZOwrb7h5uGo7g==
   dependencies:
     "@tiptap/core" "2.3.0"
     "@tiptap/extension-bubble-menu" "2.3.0"
@@ -1038,8 +1038,9 @@
     markdown-it-mark "^3.0.1"
     markdown-it-sub "^1.0.0"
     markdown-it-sup "^1.0.0"
+    onecolor "^4.1.0"
     simplify-js "^1.2.4"
-    vfluentdesign "1.2.43"
+    vfluentdesign "1.2.51"
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -8521,7 +8522,7 @@ onecolor@3.1.0:
   resolved "https://registry.yarnpkg.com/onecolor/-/onecolor-3.1.0.tgz#b72522270a49569ac20d244b3cd40fe157fda4d2"
   integrity sha512-YZSypViXzu3ul5LMu/m6XjJ9ol8qAy9S2VjHl5E6UlhUH1KGKWabyEJifn0Jjpw23bYDzC2ucKMPGiH5kfwSGQ==
 
-onecolor@^4.0.0:
+onecolor@^4.0.0, onecolor@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/onecolor/-/onecolor-4.1.0.tgz#289da70189ba6afd389d9eeccea80623d879333a"
   integrity sha512-kDUtnWdWlt5iWx85wrGZxMh8tB4058Bk1YyVpb+Zjl+2wLH/OvqIacbchJma0gjGXocwUTueLwMDVYKrbI+0zA==
@@ -11533,19 +11534,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vfluentdesign@1.2.43:
-  version "1.2.43"
-  resolved "https://registry.yarnpkg.com/vfluentdesign/-/vfluentdesign-1.2.43.tgz#f29bc1c709d1d13e8210668303b5f9ee8c403183"
-  integrity sha512-ANJHht3QBXwIK+qPQa7uc3KZloEsvjkrW1Drenq04VOJrmtlkUcTmlWqaD5BArfYixfKLJ77WJGHQPT3OoBqRA==
-  dependencies:
-    core-js "3.31.1"
-    gsap "3.1.1"
-    office-ui-fabric-core "11.0.0"
-    onecolor "3.1.0"
-    swiper "8.3.2"
-    vuedraggable "2.23.2"
-
-vfluentdesign@^1.2.51:
+vfluentdesign@1.2.51, vfluentdesign@^1.2.51:
   version "1.2.51"
   resolved "https://registry.yarnpkg.com/vfluentdesign/-/vfluentdesign-1.2.51.tgz#58138bcf929e8a152988db096f8e9dd2fd00b784"
   integrity sha512-hvqNRejZHXF3u/D9Tm0DDvAzi1GqQLx63S1uwyYIOOsXKYP0FTUiqyv2ke2B14UQSJR4eIoZmTER189ige9Z3Q==
